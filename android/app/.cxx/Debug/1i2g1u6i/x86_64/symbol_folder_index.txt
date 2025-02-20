@@ -1,0 +1,1 @@
+/Users/mahmood/AndroidStudioProjects/moviesapptest/build/app/intermediates/cxx/Debug/1i2g1u6i/obj/x86_64
