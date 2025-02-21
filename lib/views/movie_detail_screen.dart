@@ -9,9 +9,7 @@ class MovieDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Retrieve the movie passed via arguments
     final Movie movie = Get.arguments as Movie;
-    // Fetch detailed data, images, and trailers for the movie
     detailController.fetchMovieDetails(movie.id);
     detailController.fetchMovieImages(movie.id);
     detailController.fetchMovieTrailers(movie.id);
@@ -53,7 +51,6 @@ class MovieDetailScreen extends StatelessWidget {
                 SizedBox(height: 16),
                 Text(movie.overview),
                 SizedBox(height: 16),
-                // Trailer slider section
                 Obx(() {
                   if (detailController.isLoadingTrailers.value) {
                     return LoadingWidget(message: 'Loading Trailers...');
@@ -75,13 +72,10 @@ class MovieDetailScreen extends StatelessWidget {
                             itemCount: detailController.movieTrailers.length,
                             itemBuilder: (context, index) {
                               var trailer = detailController.movieTrailers[index];
-                              // Assuming each trailer map contains a 'key' and 'name'
                               String trailerKey = trailer['key'];
-                              // YouTube thumbnail URL
                               String thumbnailUrl = 'https://img.youtube.com/vi/$trailerKey/0.jpg';
                               return GestureDetector(
                                 onTap: () {
-                                  // Navigate to the player screen with the trailer key
                                   Get.toNamed('/trailer', arguments: trailerKey);
                                 },
                                 child: Container(
@@ -140,7 +134,6 @@ class MovieDetailScreen extends StatelessWidget {
                         String imagePath = detailController.movieImages[index];
                         return GestureDetector(
                           onTap: () {
-                            // Handle image tap if needed
                           },
                           child: Image.network(
                             'https://image.tmdb.org/t/p/w500$imagePath',
