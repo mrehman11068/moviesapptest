@@ -121,7 +121,6 @@ class MovieDetailScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 8),
-                // Grid of images section
                 Obx(() {
                   if (detailController.isLoadingImages.value) {
                     return LoadingWidget(message: 'Loading Images...');

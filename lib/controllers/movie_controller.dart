@@ -30,8 +30,8 @@ class MovieController extends GetxController {
 
   void fetchUpcoming() async {
     try {
-      final response = await _dio.get('$TMDB_BASE_URL/movie/upcoming', queryParameters: {
-        'api_key': TMDB_API_KEY,
+      final response = await _dio.get('$BASE_URL/movie/upcoming', queryParameters: {
+        'api_key': API_KEY,
       });
       if (response.statusCode == 200) {
         var list = response.data['results'] as List;
@@ -46,8 +46,8 @@ class MovieController extends GetxController {
 
   void fetchPopular() async {
     try {
-      final response = await _dio.get('$TMDB_BASE_URL/movie/popular', queryParameters: {
-        'api_key': TMDB_API_KEY,
+      final response = await _dio.get('$BASE_URL/movie/popular', queryParameters: {
+        'api_key': API_KEY,
       });
       if (response.statusCode == 200) {
         var list = response.data['results'] as List;
@@ -62,8 +62,8 @@ class MovieController extends GetxController {
 
   void fetchNew() async {
     try {
-      final response = await _dio.get('$TMDB_BASE_URL/movie/now_playing', queryParameters: {
-        'api_key': TMDB_API_KEY,
+      final response = await _dio.get('$BASE_URL/movie/now_playing', queryParameters: {
+        'api_key': API_KEY,
       });
       if (response.statusCode == 200) {
         var list = response.data['results'] as List;
@@ -77,10 +77,9 @@ class MovieController extends GetxController {
   }
 
   void fetchForYou() async {
-    // For "For You", using top rated movies as an example.
     try {
-      final response = await _dio.get('$TMDB_BASE_URL/movie/top_rated', queryParameters: {
-        'api_key': TMDB_API_KEY,
+      final response = await _dio.get('$BASE_URL/movie/top_rated', queryParameters: {
+        'api_key': API_KEY,
       });
       if (response.statusCode == 200) {
         var list = response.data['results'] as List;
@@ -94,10 +93,9 @@ class MovieController extends GetxController {
   }
 
   void fetchSciFi() async {
-    // Using discover endpoint with Sci-Fi genre (genre id 878)
     try {
-      final response = await _dio.get('$TMDB_BASE_URL/discover/movie', queryParameters: {
-        'api_key': TMDB_API_KEY,
+      final response = await _dio.get('$BASE_URL/discover/movie', queryParameters: {
+        'api_key': API_KEY,
         'with_genres': '878'
       });
       if (response.statusCode == 200) {

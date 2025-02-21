@@ -28,9 +28,9 @@ class _MovieSearchScreenState extends State<MovieSearchScreen> {
     });
     try {
       final response = await _dio.get(
-        '$TMDB_BASE_URL/search/movie',
+        '$BASE_URL/search/movie',
         queryParameters: {
-          'api_key': TMDB_API_KEY,
+          'api_key': API_KEY,
           'query': query,
         },
       );

@@ -19,9 +19,9 @@ class MovieDetailController extends GetxController {
     isLoading(true);
     try {
       final response = await _dio.get(
-        '$TMDB_BASE_URL/movie/$movieId',
+        '$BASE_URL/movie/$movieId',
         queryParameters: {
-          'api_key': TMDB_API_KEY,
+          'api_key': API_KEY,
         },
       );
       if (response.statusCode == 200) {
@@ -38,9 +38,9 @@ class MovieDetailController extends GetxController {
   void watchTrailer(int movieId) async {
     try {
       final response = await _dio.get(
-        '$TMDB_BASE_URL/movie/$movieId/videos',
+        '$BASE_URL/movie/$movieId/videos',
         queryParameters: {
-          'api_key': TMDB_API_KEY,
+          'api_key': API_KEY,
         },
       );
       if (response.statusCode == 200) {
@@ -66,8 +66,8 @@ class MovieDetailController extends GetxController {
     isLoadingImages(true);
     try {
       final response = await _dio.get(
-        '$TMDB_BASE_URL/movie/$movieId/images',
-        queryParameters: {'api_key': TMDB_API_KEY},
+        '$BASE_URL/movie/$movieId/images',
+        queryParameters: {'api_key': API_KEY},
       );
       if (response.statusCode == 200) {
         var list = response.data['backdrops'] as List;
@@ -87,8 +87,8 @@ class MovieDetailController extends GetxController {
     isLoadingTrailers(true);
     try {
       final response = await _dio.get(
-        '$TMDB_BASE_URL/movie/$movieId/videos',
-        queryParameters: {'api_key': TMDB_API_KEY},
+        '$BASE_URL/movie/$movieId/videos',
+        queryParameters: {'api_key': API_KEY},
       );
       if (response.statusCode == 200) {
         final List<dynamic> results = response.data['results'];

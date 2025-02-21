@@ -6,19 +6,14 @@ class SeatMappingScreen extends StatefulWidget {
 }
 
 class _SeatMappingScreenState extends State<SeatMappingScreen> {
-  // Section 1: Front Section - 3 rows, 8 seats per row.
   final int frontRows = 3;
   final int frontSeatsPerRow = 8;
   late List<List<bool>> frontSeats;
-
-  // Section 2: Middle Section - 4 rows; each row: left block (4 seats) and right block (4 seats).
   final int middleRows = 4;
   final int middleLeftSeatsPerRow = 5;
   final int middleRightSeatsPerRow = 5;
   late List<List<bool>> middleLeftSeats;
   late List<List<bool>> middleRightSeats;
-
-  // Section 3: Back Section - 2 rows, 20 seats per row.
   final int backRows = 2;
   final int backSeatsPerRow = 12;
   late List<List<bool>> backSeats;
@@ -31,8 +26,6 @@ class _SeatMappingScreenState extends State<SeatMappingScreen> {
     middleRightSeats = List.generate(middleRows, (_) => List.generate(middleRightSeatsPerRow, (_) => false));
     backSeats = List.generate(backRows, (_) => List.generate(backSeatsPerRow, (_) => false));
   }
-
-  // A helper widget that builds an individual seat tile.
   Widget buildSeatTile(String seatLabel, bool isSelected, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
@@ -64,8 +57,6 @@ class _SeatMappingScreenState extends State<SeatMappingScreen> {
       ),
     );
   }
-
-  // Build a row of seats from a list of booleans.
   Widget buildSeatRow(List<bool> seatRow, String rowLabel, {int startSeatNumber = 1}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -82,8 +73,6 @@ class _SeatMappingScreenState extends State<SeatMappingScreen> {
       }),
     );
   }
-
-  // Build a middle section row that has two blocks separated by an aisle gap.
   Widget buildMiddleRow(String rowLabel, int rowIndex) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -104,7 +93,6 @@ class _SeatMappingScreenState extends State<SeatMappingScreen> {
         ),
         // Aisle gap
         SizedBox(width: 10),
-        // Right block (seats 5 to 8)
         Row(
           children: List.generate(middleRightSeatsPerRow, (index) {
             String seatLabel = '$rowLabel${index + 1 + middleLeftSeatsPerRow}';
@@ -124,12 +112,8 @@ class _SeatMappingScreenState extends State<SeatMappingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Define row labels.
-    // Front section: rows A, B, C
     List<String> frontRowLabels = ['A', 'B', 'C'];
-    // Middle section: rows D, E, F, G
     List<String> middleRowLabels = ['D', 'E', 'F', 'G'];
-    // Back section: rows H, I
     List<String> backRowLabels = ['H', 'I'];
 
     return Scaffold(
@@ -140,24 +124,20 @@ class _SeatMappingScreenState extends State<SeatMappingScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Section 1: Front seats
             ...List.generate(frontRows, (i) {
               return buildSeatRow(frontSeats[i], frontRowLabels[i]);
             }),
             SizedBox(height: 10), // Gap row
-            // Section 2: Middle seats (each row has left & right blocks)
             ...List.generate(middleRows, (i) {
               return buildMiddleRow(middleRowLabels[i], i);
             }),
             SizedBox(height: 10), // Gap row
-            // Section 3: Back seats
             ...List.generate(backRows, (i) {
               return buildSeatRow(backSeats[i], backRowLabels[i]);
             }),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Handle booking action (e.g., collect selected seats)
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Seats booked successfully!')),
                 );

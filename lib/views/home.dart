@@ -87,7 +87,7 @@ class HometScreen extends StatelessWidget {
           options: CarouselOptions(
             height: 200,
             autoPlay: true,
-            viewportFraction: 1.0, // full-width slider
+            viewportFraction: 1.0,
             autoPlayInterval: Duration(seconds: 3),
           ),
         );
