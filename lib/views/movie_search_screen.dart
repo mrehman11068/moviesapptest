@@ -54,14 +54,23 @@ class _MovieSearchScreenState extends State<MovieSearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: TextField(
+        title:
+        TextField(
           controller: searchController,
           decoration: InputDecoration(
             hintText: 'Search Movies...',
-            border: InputBorder.none,
+            hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30),
+              borderSide: BorderSide.none,
+            ),
+            filled: true,
+            fillColor: Colors.white.withOpacity(0.2),
+            contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
           ),
           onChanged: searchMovies,
-        ),
+        )
+
       ),
       body: isLoading
           ? LoadingWidget(message: 'Searching...')
@@ -76,8 +85,8 @@ class _MovieSearchScreenState extends State<MovieSearchScreen> {
               fit: BoxFit.cover,
             )
                 : null,
-            title: Text(movie.title),
-            subtitle: Text(movie.releaseDate),
+            title: Text(movie.title, style: TextStyle(color: Colors.white)),
+            subtitle: Text(movie.releaseDate, style: TextStyle(color: Colors.white)),
             onTap: () {
               Get.toNamed('/movie_detail', arguments: movie);
             },

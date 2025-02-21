@@ -3,6 +3,7 @@ class Movie {
   final String title;
   final String overview;
   final String posterPath;
+  final String backdropPath; // <-- New field
   final String releaseDate;
 
   Movie({
@@ -10,6 +11,7 @@ class Movie {
     required this.title,
     required this.overview,
     required this.posterPath,
+    required this.backdropPath,
     required this.releaseDate,
   });
 
@@ -19,6 +21,7 @@ class Movie {
       title: json['title'] ?? '',
       overview: json['overview'] ?? '',
       posterPath: json['poster_path'] ?? '',
+      backdropPath: json['backdrop_path'] ?? '',
       releaseDate: json['release_date'] ?? '',
     );
   }
