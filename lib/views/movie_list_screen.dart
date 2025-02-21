@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/movie_category_controller.dart';
+import '../controllers/movie_controller.dart';
 import '../models/movie.dart';
 import '../utils/common_widgets.dart';
 
 class MovieListScreen extends StatelessWidget {
-  final MovieCategoryController categoryController = Get.put(MovieCategoryController());
+  final MovieController categoryController = Get.put(MovieController());
 
   /// Build the banner widget using upcoming movies’ backdrop images.
   Widget buildBanner() {
