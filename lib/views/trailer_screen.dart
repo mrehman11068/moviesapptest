@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:video_player/video_player.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class TrailerScreen extends StatefulWidget {
   @override
@@ -8,31 +9,39 @@ class TrailerScreen extends StatefulWidget {
 }
 
 class _TrailerScreenState extends State<TrailerScreen> {
-  late VideoPlayerController _controller;
-  bool _isInitialized = false;
+  late YoutubePlayerController _controller;
   late String trailerUrl;
 
   @override
   void initState() {
     super.initState();
+    // Retrieve the trailer URL from Get.arguments
     trailerUrl = Get.arguments ?? '';
-    _controller = VideoPlayerController.network(trailerUrl)
-      ..initialize().then((_) {
-        setState(() {
-          _isInitialized = true;
-        });
-        _controller.play();
-      });
-    _controller.addListener(() {
-      if (_controller.value.position >= _controller.value.duration) {
-        // Trailer finished; automatically return to the detail screen
-        Get.back();
-      }
-    });
+    final String? videoId = YoutubePlayer.convertUrlToId(trailerUrl);
+    if (videoId != null) {
+      _controller = YoutubePlayerController(
+        initialVideoId: videoId,
+        flags: YoutubePlayerFlags(
+          autoPlay: true,
+          mute: false,
+        ),
+      );
+    }
+    // Force full-screen: hide system UI and set landscape orientation
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
   }
 
   @override
   void dispose() {
+    // Restore system UI and orientation when leaving the screen
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     _controller.dispose();
     super.dispose();
   }
@@ -40,24 +49,29 @@ class _TrailerScreenState extends State<TrailerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _isInitialized
-          ? Stack(
+      // No AppBar to allow full-screen video
+      body: Stack(
         children: [
-          Center(child: VideoPlayer(_controller)),
+          YoutubePlayer(
+            controller: _controller,
+            showVideoProgressIndicator: true,
+            onEnded: (metaData) {
+              Navigator.pop(context);
+            },
+          ),
+          // Overlay a "Done" button
           Positioned(
             top: 30,
             left: 10,
             child: IconButton(
               icon: Icon(Icons.done, color: Colors.white, size: 30),
               onPressed: () {
-                // Cancel playback and return
-                Get.back();
+                Navigator.pop(context);
               },
             ),
           ),
         ],
-      )
-          : Center(child: CircularProgressIndicator()),
+      ),
     );
   }
 }

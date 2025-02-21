@@ -1,13 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import '../controllers/movie_controller.dart';
 import '../models/movie.dart';
 import '../utils/common_widgets.dart';
 
-class MovieListScreen extends StatelessWidget {
+class HometScreen extends StatelessWidget {
+
   final MovieController categoryController = Get.put(MovieController());
 
-  /// Build the banner widget using upcoming movies’ backdrop images.
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: Text('Movies', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.black,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search, color: Colors.white),
+            onPressed: () {
+              Get.toNamed('/movie_search');
+            },
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            buildBanner(),
+            buildCategorySection('Upcoming', categoryController.isLoadingUpcoming, categoryController.upcomingMovies),
+            buildCategorySection('Popular', categoryController.isLoadingPopular, categoryController.popularMovies),
+            buildCategorySection('New', categoryController.isLoadingNew, categoryController.newMovies),
+            buildCategorySection('For You', categoryController.isLoadingForYou, categoryController.forYouMovies),
+            buildCategorySection('Sci-Fi', categoryController.isLoadingSciFi, categoryController.sciFiMovies),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget buildBanner() {
     return Obx(() {
       if (categoryController.isLoadingUpcoming.value) {
@@ -19,49 +51,50 @@ class MovieListScreen extends StatelessWidget {
           child: Center(child: Text('No Banner')),
         );
       } else {
-        return SizedBox(
-          height: 200,
-          child: PageView.builder(
-            itemCount: categoryController.upcomingMovies.length,
-            itemBuilder: (context, index) {
-              Movie movie = categoryController.upcomingMovies[index];
-              return GestureDetector(
-                onTap: () {
-                  Get.toNamed('/movie_detail', arguments: movie);
-                },
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Image.network(
-                      movie.backdropPath.isNotEmpty
-                          ? 'https://image.tmdb.org/t/p/w780${movie.backdropPath}'
-                          : 'https://via.placeholder.com/780x200?text=No+Image',
-                      fit: BoxFit.cover,
+        return CarouselSlider.builder(
+          itemCount: categoryController.upcomingMovies.length,
+          itemBuilder: (context, index, realIndex) {
+            Movie movie = categoryController.upcomingMovies[index];
+            return GestureDetector(
+              onTap: () {
+                Get.toNamed('/movie_detail', arguments: movie);
+              },
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.network(
+                    movie.backdropPath.isNotEmpty
+                        ? 'https://image.tmdb.org/t/p/w780${movie.backdropPath}'
+                        : 'https://via.placeholder.com/780x200?text=No+Image',
+                    fit: BoxFit.cover,
+                  ),
+                  Container(
+                    color: Colors.black26,
+                    alignment: Alignment.bottomLeft,
+                    padding: EdgeInsets.all(16),
+                    child: Text(
+                      movie.title,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
                     ),
-                    Container(
-                      color: Colors.black26,
-                      alignment: Alignment.bottomLeft,
-                      padding: EdgeInsets.all(16),
-                      child: Text(
-                        movie.title,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
+                  ),
+                ],
+              ),
+            );
+          },
+          options: CarouselOptions(
+            height: 200,
+            autoPlay: true,
+            viewportFraction: 1.0, // full-width slider
+            autoPlayInterval: Duration(seconds: 3),
           ),
         );
       }
     });
   }
 
-  /// Build a section for a category with a horizontal list of movies.
   Widget buildCategorySection(String title, RxBool isLoading, RxList<Movie> movies) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,34 +159,4 @@ class MovieListScreen extends StatelessWidget {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        title: Text('Movies', style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.black,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search, color: Colors.white),
-            onPressed: () {
-              Get.toNamed('/movie_search');
-            },
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            buildBanner(),
-            buildCategorySection('Upcoming', categoryController.isLoadingUpcoming, categoryController.upcomingMovies),
-            buildCategorySection('Popular', categoryController.isLoadingPopular, categoryController.popularMovies),
-            buildCategorySection('New', categoryController.isLoadingNew, categoryController.newMovies),
-            buildCategorySection('For You', categoryController.isLoadingForYou, categoryController.forYouMovies),
-            buildCategorySection('Sci-Fi', categoryController.isLoadingSciFi, categoryController.sciFiMovies),
-          ],
-        ),
-      ),
-    );
-  }
 }
